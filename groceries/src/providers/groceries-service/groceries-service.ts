@@ -24,12 +24,12 @@ constructor(public http : HttpClient) {
     this.dataChanged$ = this.dataChangeSubject.asObservable();
    }
 //getting items
-getItems() : Observable <object[]> {
-  return this.http.get(this.baseURL + '/api/groceries/').pipe(
-   map(this.extractData),
-   catchError(this.handleError)
-   );
-  }
+getItems(): Observable<object[]> {
+  return this.http.get(this.baseURL+'/api/groceries').pipe(
+    map(this.extractData),
+    catchError(this.handleError)
+  );
+}
 private extractData(res: Response){
   let body = res;
   return body || {};
