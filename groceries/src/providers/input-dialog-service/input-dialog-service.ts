@@ -1,6 +1,6 @@
-import {AlertController} from 'ionic-angular';
-import {GroceriesServiceProvider} from '../../providers/groceries-service/groceries-service';
 import { Injectable } from '@angular/core';
+import { AlertController } from 'ionic-angular';
+import { GroceriesServiceProvider } from '../../providers/groceries-service/groceries-service';
 
 /*
   Generated class for the InputDialogServiceProvider provider.
@@ -10,52 +10,56 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class InputDialogServiceProvider {
 
-constructor(public alertCtrl : AlertController, public dataService : GroceriesServiceProvider) {
+  constructor(public alertCtrl: AlertController, public dataService: GroceriesServiceProvider) {
     console.log('Hello InputDialogServiceProvider Provider');
   }
 
-showPrompt(item?, index?) {
-  const prompt = this
-    .alertCtrl
-    .create({
-      title: item?'Edit item': 'Add item',
-      message:item?'Please edit item...': 'Please enter item...',
-      inputs :  [     
+  //Promt controller method for both Edit & Add item action - showPrompt()
+  showPrompt(item?, index?) {
+
+    const promt = this.alertCtrl.create({
+      //Title for Promt
+      title: item ? 'Edit item' : 'Add Item',
+      //Promt intro message
+      message: item ? 'Please enter item details' : 'Please enter item details',
+      //Promt Input elements
+      inputs: [
         {
           name: 'name',
           placeholder: 'Name',
-          value: item? item.name: null
+          value: item ? item.name : null
         },
-         {
+        {
           name: 'quantity',
           placeholder: 'Quantity',
-          value: item? item.quantity: null         
-        }
+          value: item ? item.quantity : null
+        },
       ],
+      //Promt Button elements
       buttons: [
         {
           text: 'Cancel',
           handler: data => {
-            console.log('Cancel clicked');
+
           }
-        }, {
+        },
+        {
           text: 'Save',
           handler: data => {
-            console.log('Save handler', data);
-            if (index !== undefined){
+            if (index != undefined) {
               item.name = data.name;
               item.quantity = data.quantity;
               this.dataService.editItem(item, index);
-              
             }
-            else{
+            else {
               this.dataService.addItem(data);
             }
-            
           }
         }
       ]
+
     });
-  prompt.present();
-}
+    promt.present();
+  }
+
 }

@@ -32,58 +32,61 @@ export class HomePage {
 
   }
 
-  ionViewDidLoad() {
-    this.loadItems();
-  }
-
-  loadItems() {
-    this.dataService.getItems()
-      .subscribe(
-        items => this.items = items,
-        error => this.errorMessage = <any>error
-      );
-  }
-
-  removeItem(id) {
-    this.dataService.removeItem(id);
-  }
-
-  shareItem(item, index) {
-    console.log("Sharing item: ", item, index);
-    const toast = this.toastCtrl.create({
-      message: 'Sharing item: ' + item.name + "...",
-      duration: 3000
-    });
-    toast.present();
-
-    let message = "Grocery Item Name: " + item.name + " Quantity: " + item.quantity;
-    let subject = "Shared via groceries app";
-    this.socialSharing.share(message, subject).then(() => {
-      console.log("Shared successfully");
-    }).catch((error) => {
-      console.error("Error while sharing", error);
-    });
-  }
-
-  addItem() {
-    console.log("Adding item to list");
-    this.inputDialogService.openModal();
-  }
-
-  editItem(item, index) {
-    console.log("Edit item: ", item, index);
-    const toast = this.toastCtrl.create({
-      message: 'Editing item: ' + index + "...",
-      duration: 3000
-    });
-    toast.present();
-    this.inputDialogService.openModal(item, index);
-  }
+    //Default method to load items along with Ionic contructor
+    ionViewDidEnter() {
+      this.loadItems();
+    }
   
-
-
-
-
-
-
-}
+    //Method to load items in Async
+    loadItems(){
+      this.dataService.getItems()
+        .subscribe(
+          items => this.items = items,
+          error => this.errorMessage = <any>error
+          );
+    }
+  
+    //Action for Remove items functionality - removeItem()
+    removeItem(item, index){
+      const toast = this.toastCtrl.create({
+        message: 'Removing Item number '+ index,
+        duration: 3000 }
+      );
+      toast.present();
+      //Remove item by Provider function
+      this.dataService.removeItem(item);
+    }
+    //Action for Share items functionality - shareItem()
+    shareItem(item, index){
+      const toast = this.toastCtrl.create({
+        message: 'Sharing Item number '+ index,
+        duration: 3000 }
+      );
+      toast.present();
+  
+      let message = "Grocery Item - Name: " + item.name + " - Quantity: " + item.quantity;
+      let subject = "Share via Groceries app";
+      this.socialSharing.share(message, subject).then(() => {
+        // Sharing via email is possible
+      }).catch((error) => {
+        console.error("Error while Sharing: ", error);
+      });
+  
+    }
+    //Action for Edit items functionality - removeItem()
+    editItem(item, index){
+      const toast = this.toastCtrl.create({
+        message: 'Editing Item number '+ index,
+        duration: 2000 }
+      );
+      toast.present();
+      //Edit item by Provider function
+      this.inputDialogService.showPrompt(item, index)
+    }
+    //Action for Add item functionality - addItem()
+    addItem(){
+      console.log("Adding Item");
+      //Change item by Provider function
+     this.inputDialogService.showPrompt();
+    }
+  }
